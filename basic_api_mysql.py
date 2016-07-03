@@ -18,7 +18,7 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
-url_root = '/todo/api/v1.0/'
+url_root = '/todo/api/v3.0/'
 
 @app.route(url_root+'tasks', methods=['GET', 'POST', 'PUT'])
 def do_tasks():

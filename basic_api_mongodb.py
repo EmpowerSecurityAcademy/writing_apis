@@ -1,7 +1,11 @@
 
 import json
 import pymongo
+from import_config import load_config
 from pymongo import MongoClient
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
 
 config = load_config()
 client = MongoClient(config["database_mogodb"]["connection_url"])
