@@ -1,12 +1,13 @@
 {
 	"database_mysql": {
+		"db_instance": "rest_api",
 		"user_name": "admin",
 		"password": "password",
 		"connection_url": "res-api.sdfsdfsd.us-west-2.rds.amazonaws.com:3306"
 	},
 	"database_mogodb": {
-		"user_name": "admin",
-		"password": "password",
-		"connection_url": "res-api.sdfsdfsd.us-west-2.rds.amazonaws.com:3306"
+		"user_name": "emp0wer",
+		"password": "H_Do0}-Mq}5R",
+		"connection_url": "mongodb://emp0wer:H_Do0}-Mq}5R@ds011775.mlab.com:11775/basic_api"
 	}
 }
