@@ -4,6 +4,8 @@ import pymongo
 from import_config import load_config
 from pymongo import MongoClient
 from flask import Flask, jsonify, request
+from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -20,13 +22,13 @@ url_root = '/todo/api/v2.0/'
 def do_tasks():
 	if request.method == 'GET':
 		data = collection.find()
-		return jsonify({'tasks': data})
+		return dumps(data)
 
 
 	if request.method == 'POST':
 		content = request.get_json(silent=True)
 		result = collection.insert_one(content)
-		return jsonify({'id': result.inserted_id})
+		return jsonify({'id': str(result.inserted_id)})
 
 	return jsonify({'status_code': '400'})
 
@@ -35,8 +37,8 @@ def do_tasks():
 @app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
 	if request.method == 'GET':
-		data = collection.find({"_id": task_id})
-		return jsonify({'task': data})
+		data = collection.find({"_id": ObjectId(task_id)})
+		return dumps(data)
 
 	if request.method == 'PUT':
 		content = request.get_json(silent=True)
@@ -47,7 +49,7 @@ def do_task(task_id):
 		return jsonify({'status_code': 200})
 
 	if request.method == 'DELETE':
-		collection.delete_one({"_id": task_id})
+		result = collection.delete_one({"_id": task_id})
 		return jsonify({'status_code': 200})
 
 	return jsonify({'status_code': '400'})

@@ -28,7 +28,7 @@ def do_tasks():
 		content = request.get_json(silent=True)
 		content["id"] = tasks[-1]['id'] + 1
 		tasks.append(content)
-		return jsonify({'status_code': 201})
+		return jsonify({'id': content["id"]})
 
 	return jsonify({'status_code': 404})
 
