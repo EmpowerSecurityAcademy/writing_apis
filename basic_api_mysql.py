@@ -18,7 +18,9 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET', 'POST', 'PUT'])
+url_root = '/todo/api/v1.0/'
+
+@app.route(url_root+'tasks', methods=['GET', 'POST', 'PUT'])
 def do_tasks():
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks")
@@ -36,7 +38,7 @@ def do_tasks():
 
 # RESTFUL operations related to a specific task
 
-@app.route('/todo/api/v1.0/tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks where id='" + task_id + "'")

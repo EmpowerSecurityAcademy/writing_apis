@@ -9,8 +9,10 @@ client = MongoClient(config["database_mogodb"]["connection_url"])
 db = client['basic_api']
 collection = db['tasks']
 
+url_root = '/todo/api/v2.0/'
 
-@app.route('/todo/api/v2.0/tasks', methods=['GET', 'POST', 'PUT'])
+
+@app.route(url_root+'tasks', methods=['GET', 'POST', 'PUT'])
 def do_tasks():
 	if request.method == 'GET':
 		data = collection.find()
@@ -26,7 +28,7 @@ def do_tasks():
 
 # RESTFUL operations related to a specific task
 
-@app.route('/todo/api/v2.0/tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
 	if request.method == 'GET':
 		data = collection.find({"_id": task_id})
