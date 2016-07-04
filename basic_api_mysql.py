@@ -24,7 +24,7 @@ url_root = '/todo/api/v3.0/'
 def do_tasks():
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks")
-		data = cursor.fetchone()
+		data = cursor.fetchall()
 		return make_response(jsonify({'tasks': data}), 200)
 
 
