@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, jsonify
+from flask import Flask, url_for, request, jsonify, make_response
 from flask.ext.mysql import MySQL
 from import_config import load_config
 import json
@@ -25,16 +25,16 @@ def do_tasks():
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks")
 		data = cursor.fetchone()
-		return jsonify({'tasks': data})
+		return make_response(jsonify({'tasks': data}), 200)
 
 
 	if request.method == 'POST':
 		content = request.get_json(silent=True)
 		cursor.execute("INSERT INTO tasks (title, description, done) VALUES('"+content['title'] +"', '"+ content['description'] +"', '"+ str(content['done']) + "')");
 		conn.commit()
-		return jsonify({'status_code': 201})
+		return make_response(jsonify({'status_code': 201}), 201)
 
-	return jsonify({'status_code': '400'})
+	return make_response(jsonify({'status_code': '400'}), 400)
 
 # RESTFUL operations related to a specific task
 
@@ -43,22 +43,21 @@ def do_task(task_id):
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks where id='" + task_id + "'")
 		data = cursor.fetchone()
-		return jsonify({'task': data})
+		return make_response(jsonify({'task': data}), 200)
 
 	if request.method == 'PUT':
 		content = request.get_json(silent=True)
 		print("UPDATE tasks SET title='"+content['title'] +"', description='"+ content['description'] +"', done= '"+ str(content['done']) + "' where id='" + str(task_id))
 		cursor.execute("UPDATE tasks SET title='"+content['title'] +"', description='"+ content['description'] +"', done= '"+ str(content['done']) + "' where id=" + str(task_id));
 		conn.commit()
-		return jsonify({'status_code': 200})
+		return make_response(jsonify({'status_code': 200}), 200)
 
 	if request.method == 'DELETE':
 		cursor.execute("DELETE FROM tasks where id=" + str(task_id));
 		conn.commit()
-		inserted_id = conn.insert_id()
-		return jsonify({'id': inserted_id})
+		return make_response(jsonify({'deleted_id': task_id}), 200)
 
-	return jsonify({'status_code': '400'})
+	return make_response(jsonify({'status_code': '400'}), 400)
 
 
 if __name__ == '__main__':

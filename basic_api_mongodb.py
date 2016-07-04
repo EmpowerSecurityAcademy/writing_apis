@@ -2,7 +2,7 @@ import json
 import pymongo
 from import_config import load_config
 from pymongo import MongoClient
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 
@@ -11,8 +11,8 @@ app = Flask(__name__)
 config = load_config()
 client = MongoClient(config["database_mongodb"]["connection_url"])
 
-db = client['basic_api']
-collection = db['tasks']
+db = client[config['database_mongodb']['database_name']]
+collection = db[config['database_mongodb']['collection_name']]
 
 url_root = '/todo/api/v2.0/'
 
@@ -21,14 +21,14 @@ url_root = '/todo/api/v2.0/'
 def do_tasks():
 	if request.method == 'GET':
 		data = collection.find()
-		return dumps(data)
+		return make_response(dumps(data), 200)
 
 	if request.method == 'POST':
 		content = request.get_json(silent=True)
 		result = collection.insert_one(content)
 		return jsonify({'id': str(result.inserted_id)})
 
-	return jsonify({'status_code': 404})
+	return make_response(jsonify({'status_code': 404}), 404)
 
 # RESTFUL operations related to a specific task
 
@@ -36,7 +36,7 @@ def do_tasks():
 def do_task(task_id):
 	if request.method == 'GET':
 		data = collection.find({"_id": ObjectId(task_id)})
-		return dumps(data)
+		return make_response(dumps(data), 200)
 
 	if request.method == 'PUT':
 		content = request.get_json(silent=True)
@@ -46,13 +46,13 @@ def do_task(task_id):
 						"description": content["description"], 
 						"done": content["done"]}}
 		)
-		return jsonify({'status_code': 200})
+		return make_response(jsonify({'status_code': 200}), 200)
 
 	if request.method == 'DELETE':
 		result = collection.delete_one({"_id": task_id})
-		return jsonify({'status_code': 200})
+		return make_response(jsonify({'status_code': 200}), 200)
 
-	return jsonify({'status_code': 404})
+	return make_response(jsonify({'status_code': 404}), 404)
 
 
 if __name__ == '__main__':

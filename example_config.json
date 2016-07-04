@@ -8,6 +8,8 @@
 	"database_mogodb": {
 		"user_name": "emp0wer",
 		"password": "H_Do0}-Mq}5R",
-		"connection_url": "mongodb://emp0wer:H_Do0}-Mq}5R@ds011775.mlab.com:11775/basic_api"
+		"connection_url": "mongodb://emp0wer:H_Do0}-Mq}5R@ds011775.mlab.com:11775/basic_api",
+		"database_name": "basic_api",
+		"collection_name": "tasks"
 	}
 }
