@@ -16,7 +16,6 @@ collection = db[config['database_mongodb']['collection_name']]
 
 url_root = '/todo/api/v2.0/'
 
-
 @app.route(url_root+'tasks', methods=['GET', 'POST', 'PUT'])
 def do_tasks():
 	if request.method == 'GET':
@@ -28,14 +27,14 @@ def do_tasks():
 		result = collection.insert_one(content)
 		return jsonify({'id': str(result.inserted_id)})
 
-	return make_response(jsonify({'status_code': 404}), 404)
+	return make_response(jsonify({'status_code': 500}), 500)
 
 # RESTFUL operations related to a specific task
 
 @app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
 	if request.method == 'GET':
-		data = collection.find({"_id": ObjectId(task_id)})
+		data = collection.find_one({"_id": ObjectId(task_id)})
 		return make_response(dumps(data), 200)
 
 	if request.method == 'PUT':
@@ -46,13 +45,14 @@ def do_task(task_id):
 						"description": content["description"], 
 						"done": content["done"]}}
 		)
-		return make_response(jsonify({'status_code': 200}), 200)
+		data = collection.find_one({"_id": ObjectId(task_id)})
+		return make_response(dumps(data), 200)
 
 	if request.method == 'DELETE':
 		result = collection.delete_one({"_id": task_id})
 		return make_response(jsonify({'status_code': 200}), 200)
 
-	return make_response(jsonify({'status_code': 404}), 404)
+	return make_response(jsonify({'status_code': 500}), 500)
 
 
 if __name__ == '__main__':

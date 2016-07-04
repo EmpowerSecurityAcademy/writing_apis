@@ -30,7 +30,7 @@ def do_tasks():
 		tasks.append(content)
 		return make_response(jsonify({'id': content["id"]}), 201)
 
-	return make_response(jsonify({'status_code': 404}), 404)
+	return make_response(jsonify({'status_code': 500}), 500)
 
 @app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
@@ -45,6 +45,8 @@ def do_task(task_id):
 	if request.method == 'PUT':
 		content = request.get_json(silent=True)
 		task_array = [t for t in tasks if t['id'] == task_id]
+		if len(task_array) == 0:
+			return make_response(jsonify({'status_code': 404}), 404)
 		task = task_array[0]
 		task["title"] = content["title"]
 		task["description"] = content["description"]
@@ -56,11 +58,11 @@ def do_task(task_id):
 		task_array = [t for t in tasks if t['id'] == task_id]
 		if len(task_array) > 0:
 			tasks.remove(task_array[0])
-			return make_response(jsonify({'status_code': 200}), 200)
+			return make_response(jsonify({'deleted_id': task_id}), 200)
 		else:
 			return make_response(jsonify({'status_code': 404}), 404)
 
-	return make_response(jsonify({'status_code': 404}), 404) 
+	return make_response(jsonify({'status_code': 500}), 500) 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
