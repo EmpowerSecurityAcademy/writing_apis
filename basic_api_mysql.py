@@ -20,7 +20,7 @@ cursor = conn.cursor()
 
 url_root = '/todo/api/v3.0/'
 
-@app.route(url_root+'tasks', methods=['GET', 'POST', 'PUT'])
+@app.route(url_root+'tasks', methods=['GET', 'POST'])
 def do_tasks():
 	if request.method == 'GET':
 		cursor.execute("SELECT * from tasks")
