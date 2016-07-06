@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, make_response
 
-app = Flask(__name__)
+basic_api = Flask(__name__)
 
 tasks = [
 	{
@@ -19,7 +19,7 @@ tasks = [
 
 url_root = '/todo/api/v1.0/'
 
-@app.route(url_root+'tasks', methods=['GET', 'POST'])
+@basic_api.route(url_root+'tasks', methods=['GET', 'POST'])
 def do_tasks():
 	if request.method == 'GET':
 		return make_response(jsonify({'tasks': tasks}), 200)
@@ -32,7 +32,7 @@ def do_tasks():
 
 	return make_response(jsonify({'status_code': 500}), 500)
 
-@app.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
+@basic_api.route(url_root+'tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
 def do_task(task_id):
 	task_id = int(task_id)
 	if request.method == 'GET':
@@ -50,7 +50,7 @@ def do_task(task_id):
 		task = task_array[0]
 		task["title"] = content["title"]
 		task["description"] = content["description"]
-		task["description"] = content["description"]
+		task["done"] = content["done"]
 		return make_response(jsonify({'task': task}), 200)
 
 
@@ -64,5 +64,6 @@ def do_task(task_id):
 
 	return make_response(jsonify({'status_code': 500}), 500) 
 
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+	app.run(debug=True, host='0.0.0.0', port=5001)
