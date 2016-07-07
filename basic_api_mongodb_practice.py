@@ -33,7 +33,7 @@ def do_tasks():
 		response = []
 		for element in data:
 			response.append(format_json(element))
-		return make_response(dumps({'tasks':response}), 200)
+		return make_response(jsonify({'tasks':response}), 200)
 
 	if request.method == 'POST':
 		content = request.get_json(silent=True)
@@ -48,7 +48,7 @@ def do_tasks():
 def do_task(task_id):
 	if request.method == 'GET':
 		data = basic_api.conn.find_one({"_id": ObjectId(task_id)})
-		return make_response(dumps({'task':format_json(data)}), 200)
+		return make_response(jsonify({'task':format_json(data)}), 200)
 
 	if request.method == 'PUT':
 		content = request.get_json(silent=True)
@@ -59,11 +59,11 @@ def do_task(task_id):
 						"done": content["done"]}}
 		)
 		data = basic_api.conn.find_one({"_id": ObjectId(task_id)})
-		return make_response(dumps({'task':format_json(data)}), 200)
+		return make_response(jsonify({'task':format_json(data)}), 200)
 
 	if request.method == 'DELETE':
 		result = basic_api.conn.delete_one({"_id": task_id})
-		return make_response(dumps({'deleted_id': task_id}), 200)
+		return make_response(jsonify({'deleted_id': task_id}), 200)
 
 	return make_response(jsonify({'status_code': 500}), 500)
 
