@@ -9,10 +9,10 @@ config = load_config()
 mysql = MySQL()
 basic_api = Flask(__name__)
 
-basic_api.config['MYSQL_DATABASE_USER'] = config["database"]["user_name"]
-basic_api.config['MYSQL_DATABASE_PASSWORD'] = config["database"]["password"]
-basic_api.config['MYSQL_DATABASE_DB'] = config["database"]["db_instance"]
-basic_api.config['MYSQL_DATABASE_HOST'] = config["database"]["connection_url"]
+basic_api.config['MYSQL_DATABASE_USER'] = config["database_mysql"]["user_name"]
+basic_api.config['MYSQL_DATABASE_PASSWORD'] = config["database_mysql"]["password"]
+basic_api.config['MYSQL_DATABASE_DB'] = config["database_mysql"]["db_instance"]
+basic_api.config['MYSQL_DATABASE_HOST'] = config["database_mysql"]["connection_url"]
 
 mysql.init_app(basic_api)
 
