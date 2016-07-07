@@ -9,10 +9,10 @@ from bson.objectid import ObjectId
 basic_api = Flask(__name__)
 
 config = load_config()
-client = MongoClient(config["database_mogodb"]["connection_url"])
+client = MongoClient(config["database_mongodb"]["connection_url"])
 
-db = client[config['database_mogodb']['database_name']]
-basic_api.conn = db[config['database_mogodb']['collection_name']]
+db = client[config['database_mongodb']['database_name']]
+basic_api.conn = db[config['database_mongodb']['collection_name']]
 
 url_root = '/todo/api/v2.0/'
 
